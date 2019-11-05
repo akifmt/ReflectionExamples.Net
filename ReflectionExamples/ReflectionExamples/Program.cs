@@ -8,8 +8,8 @@ namespace ReflectionExamples
 {
     class Program
     {
-        public const string PROJECT_NAME = "ReflectionExamples";
-
+        public const int PADRIGHT_VALUE = 55;
+        public static readonly List<TypeInfo> definedTypes = Assembly.GetCallingAssembly().DefinedTypes.ToList();
 
         static void Main(string[] args)
         {
@@ -20,10 +20,10 @@ namespace ReflectionExamples
             Console.ReadKey();
         }
 
-
-
         static void WritePropertiesonBaseClass(object obj)
         {
+            
+
             Type typeBase = obj.GetType();
             PropertyInfo[] propertyInfosBase = typeBase.GetProperties();
 
@@ -33,34 +33,32 @@ namespace ReflectionExamples
             {
                 Type propTypeBase = propertyInfoBase.PropertyType;
 
-                switch (propTypeBase.Namespace)
+                if (propTypeBase.Namespace == "System")
                 {
-                    case "System":
-                        // Built-in types
-                        ProcessingBuiltinTypes(propertyInfoBase, obj);
-                        break;
-
-                    case PROJECT_NAME:
-                        // User defined classes
-                        ProcessingClassTypes(propertyInfoBase, obj);
-
-                        break;
-
-                    case "System.Collections.Generic":
-                        // Collection types
-                        ProcessingGenericCollection(propertyInfoBase, obj);
-                        break;
-
-                    default:
-                        break;
+                    // Built-in types
+                    ProcessingBuiltinTypes(propertyInfoBase, obj);
                 }
-
+                else if (definedTypes.Contains(propTypeBase))
+                {
+                    // User defined classes
+                    ProcessingClassTypes(propertyInfoBase, obj);
+                }
+                else if (propTypeBase.Namespace == "System.Collections.Generic")
+                {
+                    // Collection types
+                    ProcessingGenericCollection(propertyInfoBase, obj);
+                }
+                else
+                {
+                    Console.WriteLine("UNDEFINED TYPE: " + propertyInfoBase.Name);
+                }
             }
         }
 
         static void ProcessingBuiltinTypes(PropertyInfo propertyInfo, object data, string prefix = "|-")
         {
-            Console.WriteLine(string.Format("{0}{1}({2}) \t\tValue:{3}", prefix, propertyInfo.Name, propertyInfo.PropertyType.Name, propertyInfo.GetValue(data)));
+            string formatted = string.Format("{0}{1}({2})", prefix, propertyInfo.Name, propertyInfo.PropertyType.Name).PadRight(PADRIGHT_VALUE, '-');
+            Console.WriteLine(formatted + "Value:" + propertyInfo.GetValue(data));
         }
 
         /// <summary>
@@ -72,10 +70,13 @@ namespace ReflectionExamples
         /// <param name="prefix"></param>
         static void ProcessingBuiltinTypes(Type type, object value, int? index = null, string prefix = "|-")
         {
+            string formatted = "";
             if (index == null)
-                Console.WriteLine(string.Format("{0}({1}) \t\tValue:{2}", prefix, type.Name, value));
+                formatted = string.Format("{0}({1})", prefix, type.Name).PadRight(PADRIGHT_VALUE, '-');
             else
-                Console.WriteLine(string.Format("{0}{1}({2}) \t\tValue:{3}", prefix, index, type.Name, value));
+                formatted = string.Format("{0}{1}({2})", prefix, index, type.Name).PadRight(PADRIGHT_VALUE, '-');
+                
+            Console.WriteLine(formatted + "Value:" + value);
         }
 
         static void ProcessingClassTypes(PropertyInfo propertyInfo, object data, string prefix = "|-")
@@ -88,7 +89,8 @@ namespace ReflectionExamples
 
             foreach (var classProp in classPropertyInfos)
             {
-                Console.WriteLine(string.Format("{0}|-{1}({2}) \t\t\tValue:{3}", prefix, classProp.Name, classProp.PropertyType.Name, classProp.GetValue(classDatas)));
+                string formatted = string.Format("{0}|-{1}({2}) ", prefix, classProp.Name, classProp.PropertyType.Name).PadRight(PADRIGHT_VALUE, '-');
+                Console.WriteLine(formatted + "Value:" + classProp.GetValue(classDatas));
             }
         }
 
@@ -107,7 +109,8 @@ namespace ReflectionExamples
 
             foreach (var classProp in classPropertyInfos)
             {
-                Console.WriteLine(string.Format("{0}|-{1}({2}) \t\t\tValue:{3}", prefix, classProp.Name, classProp.PropertyType.Name, classProp.GetValue(data)));
+                string formatted = string.Format("{0}|-{1}({2})", prefix, classProp.Name, classProp.PropertyType.Name).PadRight(PADRIGHT_VALUE, '-');
+                Console.WriteLine(formatted + "Value:" + classProp.GetValue(data));
             }
         }
 
@@ -116,37 +119,36 @@ namespace ReflectionExamples
             var dataICollection = propertyInfo.GetValue(data) as System.Collections.ICollection;
             Type typeInner = propertyInfo.PropertyType.GetGenericArguments()[0];
 
-            Console.WriteLine(string.Format("{0}{1}({2}<{3}>) \t\tCount:{4}", prefix, propertyInfo.Name, propertyInfo.PropertyType.Name, typeInner.Name, dataICollection.Count));
+            Console.WriteLine(string.Format("{0}{1}({2}<{3}>) Count:{4}", prefix, propertyInfo.Name, propertyInfo.PropertyType.Name, typeInner.Name, dataICollection.Count));
 
-            switch (typeInner.Namespace)
+            if (typeInner.Namespace == "System")
             {
-                case "System":
-                    // Built-in types collection
-
-                    int i = 0;
-                    foreach (var dataChild in dataICollection)
-                    {
-                        ProcessingBuiltinTypes(typeInner, dataChild, i, prefix + prefix);
-                        i++;
-                    }
-                    break;
-
-                case PROJECT_NAME:
-                    // User defined classes collection
-                    int j = 0;
-                    foreach (var dataChild in dataICollection)
-                    {
-                        ProcessingClassTypes(typeInner, dataChild, j);
-                        j++;
-                    }
-                    break;
-
-                case "System.Collections.Generic":
-                    // Collection types collection
-                    ProcessingGenericCollection(propertyInfo, data);
-                    break;
-                default:
-                    break;
+                // Built-in types
+                int i = 0;
+                foreach (var dataChild in dataICollection)
+                {
+                    ProcessingBuiltinTypes(typeInner, dataChild, i, prefix + prefix);
+                    i++;
+                }
+            }
+            else if (definedTypes.Contains(typeInner))
+            {
+                // User defined classes collection
+                int j = 0;
+                foreach (var dataChild in dataICollection)
+                {
+                    ProcessingClassTypes(typeInner, dataChild, j);
+                    j++;
+                }
+            }
+            else if (typeInner.Namespace == "System.Collections.Generic")
+            {
+                // Collection types collection
+                ProcessingGenericCollection(propertyInfo, data);
+            }
+            else
+            {
+                Console.WriteLine("UNDEFINED TYPE: " + propertyInfo.Name);
             }
 
         }
