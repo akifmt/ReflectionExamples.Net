@@ -58,6 +58,23 @@ namespace ReflectionExamples
         // System.Collections.Generic - include Class
         public List<Urun> PropListUrun { get { return new List<Urun> { new Urun { Id = 1, UrunAdi = "aaa", UrunDetayi = "ddd" } }; } } //List<class>	
 
+        // bunun icin henuz dunya hazir degil
+        // System.Collections.Generic - include System.Collections.Generic - include Class
+        //public List<List<Urun>> PropListListUrun {
+        //    get {
+        //        return new List<List<Urun>> {
+        //            new List<Urun> {
+        //                new Urun { Id = 1, UrunAdi = "aa", UrunDetayi = "ddd" },
+        //                new Urun { Id = 2, UrunAdi = "bb", UrunDetayi = "ddd" },
+        //            },
+        //            new List<Urun> {
+        //                new Urun { Id = 3, UrunAdi = "cc", UrunDetayi = "ddd" },
+        //                new Urun { Id = 4, UrunAdi = "dd", UrunDetayi = "ddd" },
+        //            }
+        //        };
+        //    }
+        //} //List<List<class>>	
+
     }
 
     public class Kategori
