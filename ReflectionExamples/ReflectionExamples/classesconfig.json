@@ -1,0 +1,19 @@
+{
+  "Classes": [
+    {
+      "ClassName": "Class1",
+      "Properties": [
+        {
+          "Name": "PropInt32",
+          "Type": "System.Int32",
+          "Value": 123456
+        },
+        {
+          "Name": "PropString",
+          "Type": "System.String",
+          "Value": "prop string value"
+        }
+      ]
+    }
+  ]
+}

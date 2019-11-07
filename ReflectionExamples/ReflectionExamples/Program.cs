@@ -13,6 +13,17 @@ namespace ReflectionExamples
 
         static void Main(string[] args)
         {
+
+
+            ClassesJson classes= ClassReaderJson.ReadClassFromFile();
+
+
+
+
+
+
+
+
             //WritePropertiesonBaseClass(Statics.OrnekVeri);
 
             WritePropertiesonBaseClass(Statics.Data);
