@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace ReflectionExamples
 {
@@ -13,14 +14,56 @@ namespace ReflectionExamples
 
         static void Main(string[] args)
         {
+            ClassesJson classData = ClassReaderJson.ReadClassFromFile();
+
+            foreach (var aclass in classData.Classes)
+            {
+                string className = aclass.ClassName;
+                List<ClassField> classProperties = aclass.ClassFields;
+
+                //MyObjectBuilder Class
+                MyObjectBuilder o = new MyObjectBuilder();
+
+                //Creating a new object dynamically
+                object newObj = o.CreateNewObject(aclass.ClassFields);
+                IList objList = o.getObjectList();
+
+                Type t = newObj.GetType();
+                object instance = Activator.CreateInstance(t);
+
+                PropertyInfo[] props = instance.GetType().GetProperties();
+
+                int instancePropsCount = props.Count();
+
+                for (int i = 0; i < instancePropsCount; ++i)
+                {
+                    string fieldName = props[i].Name;
+                    MemberInfo[] mInfo = null;
+                    PropertyInfo pInfo = newObj.GetType().GetProperty(fieldName);
+
+                    if (pInfo != null)
+                    {
+                        var value = pInfo.GetValue(newObj, null);
+                        mInfo = t.GetMember(fieldName);
+
+                        if (value != null && mInfo != null && !string.IsNullOrEmpty(mInfo[0].ToString()))
+                            MyObjectBuilder.SetMemberValue(mInfo[0], instance, value);
+                    }
+                    else
+                    {
+                        mInfo = t.GetMember(fieldName);
+
+                        if (mInfo != null && !string.IsNullOrEmpty(mInfo[0].ToString()))
+                            MyObjectBuilder.SetMemberValue(mInfo[0], instance, null);
+                    }
+                }
+
+                objList.Add(instance);
 
 
-            ClassesJson classes= ClassReaderJson.ReadClassFromFile();
 
-
-
-
-
+                Console.WriteLine("asd");
+            }
 
 
 
@@ -33,7 +76,7 @@ namespace ReflectionExamples
 
         static void WritePropertiesonBaseClass(object obj)
         {
-            
+
 
             Type typeBase = obj.GetType();
             PropertyInfo[] propertyInfosBase = typeBase.GetProperties();
@@ -86,7 +129,7 @@ namespace ReflectionExamples
                 formatted = string.Format("{0}({1})", prefix, type.Name).PadRight(PADRIGHT_VALUE, '-');
             else
                 formatted = string.Format("{0}{1}({2})", prefix, index, type.Name).PadRight(PADRIGHT_VALUE, '-');
-                
+
             Console.WriteLine(formatted + "Value:" + value);
         }
 
@@ -164,5 +207,8 @@ namespace ReflectionExamples
 
         }
 
+
     }
+
+
 }

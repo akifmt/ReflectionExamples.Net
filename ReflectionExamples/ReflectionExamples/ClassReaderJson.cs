@@ -35,15 +35,21 @@ namespace ReflectionExamples
     public class ClassJson
     {
         public string ClassName { get; set; }
-        public List<ClassProperty> Properties { get; set; }
+        public List<ClassField> ClassFields { get; set; }
     }
 
     [Serializable]
-    public class ClassProperty
+    public class ClassField
     {
         public string Name { get; set; }
-        public string Type { get; set; }
+        public string TypeName { get; set; }
         public string Value { get; set; }
+
+        public Type Type {
+            get {
+                return Type.GetType(TypeName);
+            }
+        }
     }
 
 }
