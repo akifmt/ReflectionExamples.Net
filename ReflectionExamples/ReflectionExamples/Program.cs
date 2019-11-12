@@ -16,6 +16,7 @@ namespace ReflectionExamples
         {
             ClassesJson classData = ClassReaderJson.ReadClassFromFile();
 
+            IList objList = null; 
             foreach (var aclass in classData.Classes)
             {
                 string className = aclass.ClassName;
@@ -25,8 +26,8 @@ namespace ReflectionExamples
                 MyObjectBuilder o = new MyObjectBuilder();
 
                 //Creating a new object dynamically
-                object newObj = o.CreateNewObject(aclass.ClassFields);
-                IList objList = o.getObjectList();
+                object newObj = o.CreateNewObject(classProperties);
+                objList = o.getObjectList();
 
                 Type t = newObj.GetType();
                 object instance = Activator.CreateInstance(t);
@@ -41,9 +42,14 @@ namespace ReflectionExamples
                     MemberInfo[] mInfo = null;
                     PropertyInfo pInfo = newObj.GetType().GetProperty(fieldName);
 
+                    var prop = classProperties.Find(x => x.Name == fieldName);
+                    object value = null;
+                    if (prop != null)
+                        value = prop.Value;
+
                     if (pInfo != null)
                     {
-                        var value = pInfo.GetValue(newObj, null);
+                        //var value = pInfo.GetValue(newObj, null);
                         mInfo = t.GetMember(fieldName);
 
                         if (value != null && mInfo != null && !string.IsNullOrEmpty(mInfo[0].ToString()))
@@ -59,12 +65,12 @@ namespace ReflectionExamples
                 }
 
                 objList.Add(instance);
-
-
-
-                Console.WriteLine("asd");
             }
 
+            //foreach (var obj in objList)
+            //{
+            //    WritePropertiesonBaseClass(obj);
+            //}
 
 
             //WritePropertiesonBaseClass(Statics.OrnekVeri);

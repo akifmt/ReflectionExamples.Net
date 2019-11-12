@@ -4,8 +4,8 @@
       "ClassName": "Class1",
       "ClassFields": [
         {
-          "Name": "PropInt32",
-          "TypeName": "System.Int32",
+          "Name": "PropInt64",
+          "TypeName": "System.Int64",
           "Value": 123456
         },
         {

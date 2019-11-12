@@ -43,7 +43,7 @@ namespace ReflectionExamples
     {
         public string Name { get; set; }
         public string TypeName { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         public Type Type {
             get {
