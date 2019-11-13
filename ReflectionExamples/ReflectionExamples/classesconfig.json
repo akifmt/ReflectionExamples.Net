@@ -12,7 +12,13 @@
           "Name": "PropString",
           "TypeName": "System.String",
           "Value": "prop string value"
+        },
+        {
+          "Name": "PropListInt",
+          "TypeName": "System.Collections.Generic.List<int>",
+          "Value": [ 1, 2, 3 ]
         }
+
       ]
     }
   ]

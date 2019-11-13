@@ -29,6 +29,8 @@ namespace ReflectionExamples
                 object newObj = o.CreateNewObject(classProperties);
                 objList = o.getObjectList();
 
+                
+
                 Type t = newObj.GetType();
                 object instance = Activator.CreateInstance(t);
 
@@ -67,15 +69,15 @@ namespace ReflectionExamples
                 objList.Add(instance);
             }
 
-            //foreach (var obj in objList)
-            //{
-            //    WritePropertiesonBaseClass(obj);
-            //}
+            foreach (var obj in objList)
+            {
+                WritePropertiesonBaseClass(obj);
+            }
 
 
             //WritePropertiesonBaseClass(Statics.OrnekVeri);
 
-            WritePropertiesonBaseClass(Statics.Data);
+            //WritePropertiesonBaseClass(Statics.Data);
 
             Console.ReadKey();
         }
