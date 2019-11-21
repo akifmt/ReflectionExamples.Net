@@ -16,7 +16,7 @@ namespace ReflectionExamples
         {
             ClassesJson classData = ClassReaderJson.ReadClassFromFile();
 
-            IList objList = null; 
+            IList objList = null;
             foreach (var aclass in classData.Classes)
             {
                 string className = aclass.ClassName;
@@ -29,7 +29,7 @@ namespace ReflectionExamples
                 object newObj = o.CreateNewObject(classProperties);
                 objList = o.getObjectList();
 
-                
+
 
                 Type t = newObj.GetType();
                 object instance = Activator.CreateInstance(t);
@@ -55,7 +55,18 @@ namespace ReflectionExamples
                         mInfo = t.GetMember(fieldName);
 
                         if (value != null && mInfo != null && !string.IsNullOrEmpty(mInfo[0].ToString()))
-                            MyObjectBuilder.SetMemberValue(mInfo[0], instance, value);
+                        {
+                            if (typeof(ICollection).IsAssignableFrom(((PropertyInfo)mInfo[0]).PropertyType))
+                            {
+                                // collection type assign values
+                                MyObjectBuilder.SetCollectionMemberValue(mInfo[0], instance, value);
+                            }
+                            else
+                            {
+                                MyObjectBuilder.SetMemberValue(mInfo[0], instance, value);
+                            }
+                        }
+                            
                     }
                     else
                     {
@@ -64,6 +75,8 @@ namespace ReflectionExamples
                         if (mInfo != null && !string.IsNullOrEmpty(mInfo[0].ToString()))
                             MyObjectBuilder.SetMemberValue(mInfo[0], instance, null);
                     }
+
+                    
                 }
 
                 objList.Add(instance);

@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ReflectionExamples
@@ -47,7 +49,24 @@ namespace ReflectionExamples
 
         public Type Type {
             get {
-                return Type.GetType(TypeName);
+                string formatted1 = TypeName;
+                if (TypeName.Contains("<"))
+                {
+                    string collectionTypeName = formatted1.Split('<')[0] + "`1";
+                    string innerType = Regex.Match(formatted1, @"\<([^)]*)\>").Groups[1].Value;
+                    string collectionTypeNamewithInnerType = collectionTypeName + "[" + innerType + "]";
+                    return Type.GetType(collectionTypeNamewithInnerType); ;
+                }
+                else if (TypeName.Contains("["))
+                {
+                    string collectionTypeName = formatted1.Split('[')[0] + "`1";
+                    string innerType = Regex.Match(formatted1, @"\[([^)]*)\]").Groups[1].Value;
+                    string collectionTypeNamewithInnerType = collectionTypeName + "[" + innerType + "]";
+                    return Type.GetType(collectionTypeNamewithInnerType); ;
+                }
+                else
+                    return Type.GetType(TypeName);
+
             }
         }
     }

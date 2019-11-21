@@ -128,5 +128,25 @@ namespace ReflectionExamples
                     throw new ArgumentException("MemberInfo must be if type FieldInfo or PropertyInfo", "member");
             }
         }
+
+        public static void SetCollectionMemberValue(MemberInfo member, object target, object value)
+        {
+            object[] valueElements = ((Newtonsoft.Json.Linq.JArray)value).ToObject<object[]>();
+            object[] indexElements = Enumerable.Range(0, valueElements.Length).OfType<object>().ToArray();
+
+            switch (member.MemberType)
+            {
+                case MemberTypes.Field:
+                    ((FieldInfo)member).SetValue(target, valueElements);
+                    break;
+                case MemberTypes.Property:
+
+                    //  System.Reflection.TargetParameterCountException: 'Parameter count mismatch.'
+                    ((PropertyInfo)member).SetValue(target, valueElements, indexElements);
+                    break;
+                default:
+                    throw new ArgumentException("MemberInfo must be if type FieldInfo or PropertyInfo", "member");
+            }
+        }
     }
 }

@@ -15,10 +15,9 @@
         },
         {
           "Name": "PropListInt",
-          "TypeName": "System.Collections.Generic.List<int>",
+          "TypeName": "System.Collections.Generic.List<System.Int32>",
           "Value": [ 1, 2, 3 ]
         }
-
       ]
     }
   ]
