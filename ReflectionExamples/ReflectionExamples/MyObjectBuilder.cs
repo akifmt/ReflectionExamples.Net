@@ -119,19 +119,19 @@ namespace ReflectionExamples
             switch (member.MemberType)
             {
                 case MemberTypes.Field:
-                    ((FieldInfo)member).SetValue(target, value);
+                    ((FieldInfo)member).SetValue(target, Convert.ChangeType(value, ((FieldInfo)member).FieldType));
                     break;
                 case MemberTypes.Property:
-                    ((PropertyInfo)member).SetValue(target, value, null);
+                    ((PropertyInfo)member).SetValue(target, Convert.ChangeType(value, ((PropertyInfo)member).PropertyType), null);
                     break;
                 default:
                     throw new ArgumentException("MemberInfo must be if type FieldInfo or PropertyInfo", "member");
             }
         }
 
-        public static void SetCollectionMemberValue(MemberInfo member, object target, object value)
+        public static void SetCollectionMemberValue(MemberInfo member, object target, object values)
         {
-            object[] valueElements = ((Newtonsoft.Json.Linq.JArray)value).ToObject<object[]>();
+            object[] valueElements = ((Newtonsoft.Json.Linq.JArray)values).ToObject<object[]>();
             object[] indexElements = Enumerable.Range(0, valueElements.Length).OfType<object>().ToArray();
 
             switch (member.MemberType)
@@ -140,9 +140,19 @@ namespace ReflectionExamples
                     ((FieldInfo)member).SetValue(target, valueElements);
                     break;
                 case MemberTypes.Property:
+                    PropertyInfo prop = (PropertyInfo)member;
+                    Object collectionInstance = Activator.CreateInstance(prop.PropertyType);
+                    prop.SetValue(target, collectionInstance);
 
+                    Type innerType = prop.PropertyType.GetGenericArguments()[0];
+                    MethodInfo addMethod = prop.PropertyType.GetMethod("Add");
+                    foreach (var value in valueElements)
+                    {
+                        addMethod.Invoke(prop.GetValue(target), new object[] { Convert.ChangeType(value, innerType) });
+                    }
+                    
                     //  System.Reflection.TargetParameterCountException: 'Parameter count mismatch.'
-                    ((PropertyInfo)member).SetValue(target, valueElements, indexElements);
+                    //((PropertyInfo)member).SetValue(target, valueElements, indexElements);
                     break;
                 default:
                     throw new ArgumentException("MemberInfo must be if type FieldInfo or PropertyInfo", "member");

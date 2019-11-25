@@ -14,6 +14,35 @@ namespace ReflectionExamples
 
         static void Main(string[] args)
         {
+            System.ConsoleKey consoleKey = ConsoleKey.A;
+            while (consoleKey != ConsoleKey.E)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("1-> For SampleClass".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("2-> For SampleAllTypesData".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("3-> For SampleAllTypesData".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("4- For ReadClassFromFile(classesconfig.json)".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("e- EXIT".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine("");
+
+                consoleKey = Console.ReadKey().Key;
+
+                // control the key in here....
+                if (true)
+                {
+
+                }
+                
+
+            }
+            
+            // Test classes
+            //WritePropertiesonBaseClass(Statics.SampleClass);
+            //WritePropertiesonBaseClass(Statics.SampleAllTypesData);
+
+
             ClassesJson classData = ClassReaderJson.ReadClassFromFile();
 
             IList objList = null;
@@ -28,8 +57,6 @@ namespace ReflectionExamples
                 //Creating a new object dynamically
                 object newObj = o.CreateNewObject(classProperties);
                 objList = o.getObjectList();
-
-
 
                 Type t = newObj.GetType();
                 object instance = Activator.CreateInstance(t);
@@ -86,11 +113,6 @@ namespace ReflectionExamples
             {
                 WritePropertiesonBaseClass(obj);
             }
-
-
-            //WritePropertiesonBaseClass(Statics.OrnekVeri);
-
-            //WritePropertiesonBaseClass(Statics.Data);
 
             Console.ReadKey();
         }
