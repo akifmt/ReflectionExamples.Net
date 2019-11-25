@@ -4,8 +4,8 @@
       "ClassName": "Class1",
       "ClassFields": [
         {
-          "Name": "PropInt64",
-          "TypeName": "System.Int64",
+          "Name": "PropInt32",
+          "TypeName": "System.Int32",
           "Value": 123456
         },
         {
@@ -17,6 +17,11 @@
           "Name": "PropListInt",
           "TypeName": "System.Collections.Generic.List<System.Int32>",
           "Value": [ 1, 2, 3 ]
+        },
+        {
+          "Name": "PropListStr",
+          "TypeName": "System.Collections.Generic.List<System.String>",
+          "Value": [ "aaa", "bbb", "ccc" ]
         }
       ]
     }

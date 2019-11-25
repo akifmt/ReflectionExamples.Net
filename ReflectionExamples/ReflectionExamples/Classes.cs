@@ -10,21 +10,20 @@ namespace ReflectionExamples
     public static class Statics
     {
 
-        public static AllTypesData Data = new AllTypesData();
+        public static AllTypesData SampleAllTypesData = new AllTypesData();
 
-        public static Kategori OrnekVeri = new Kategori
+        public static Category SampleClass = new Category
         {
-            KategoriId = 1,
-            KategoriAdi = "Arabalar",
-            KategoriDetayi = "Super Arabalar",
-            OnemliUrun = new Urun { Id = 1, UrunAdi = "Mercedes 1", UrunDetayi = "Bu model tekerleklidir." },
-            Urunler = new List<Urun>
+            CategoryId = 1,
+            CategoryName = "Cars",
+            CategoryDetails = "Best Cars",
+            SpecialProduct = new Product { Id = 1, ProductName = "Mercedes 1", ProductDetails= "Special model." },
+            Products = new List<Product>
             {
-                new Urun { Id = 11, UrunAdi = "Mercedes 11", UrunDetayi = "Bu modelde cam vardır." },
-                new Urun { Id = 12, UrunAdi = "Mercedes 12", UrunDetayi = "Bu modele direksiyon ekledik." },
+                new Product{ Id = 11, ProductName = "Mercedes 11", ProductDetails = "Old model." },
+                new Product { Id = 12, ProductName = "Mercedes 12", ProductDetails = "New model." },
             }
         };
-
 
     }
 
@@ -49,14 +48,14 @@ namespace ReflectionExamples
         public System.String PropString { get { return "ABC"; } } //string	
 
         // Class - User defined
-        public Urun PropUrun { get { return new Urun { Id = 1, UrunAdi = "ad", UrunDetayi = "detay" }; } }
+        public Product PropProduct { get { return new Product { Id = 1, ProductName = "name...", ProductDetails = "details..." }; } }
 
         // System.Collections.Generic - include Built-in Type
         public List<int> PropListInt { get { return new List<int> { 1, 2, 3 }; } } //List<int>	
         public Dictionary<int, string> PropDictionaryIntStr { get { return new Dictionary<int, string> { { 1, "A" }, { 2, "B" } }; } } //Dictionary<int,string>	
 
         // System.Collections.Generic - include Class
-        public List<Urun> PropListUrun { get { return new List<Urun> { new Urun { Id = 1, UrunAdi = "aaa", UrunDetayi = "ddd" } }; } } //List<class>	
+        public List<Product> PropListProduct { get { return new List<Product> { new Product { Id = 1, ProductName = "aaa", ProductDetails = "ddd" } }; } } //List<class>	
 
         // bunun icin henuz dunya hazir degil
         // System.Collections.Generic - include System.Collections.Generic - include Class
@@ -77,20 +76,20 @@ namespace ReflectionExamples
 
     }
 
-    public class Kategori
+    public class Category
     {
-        public int KategoriId { get; set; }
-        public string KategoriAdi { get; set; }
-        public string KategoriDetayi { get; set; }
-        public Urun OnemliUrun { get; set; }
-        public List<Urun> Urunler { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryDetails { get; set; }
+        public Product SpecialProduct { get; set; }
+        public List<Product> Products { get; set; }
     }
 
-    public class Urun
+    public class Product
     {
         public int Id { get; set; }
-        public string UrunAdi { get; set; }
-        public string UrunDetayi { get; set; }
+        public string ProductName { get; set; }
+        public string ProductDetails { get; set; }
     }
 
 }
