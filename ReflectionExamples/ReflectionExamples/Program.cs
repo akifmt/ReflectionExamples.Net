@@ -14,37 +14,50 @@ namespace ReflectionExamples
 
         static void Main(string[] args)
         {
-            System.ConsoleKey consoleKey = ConsoleKey.A;
-            while (consoleKey != ConsoleKey.E)
+            char selected = '\0';
+            while (Char.ToLower(selected) != 'e')
             {
+                Console.Clear();
                 Console.WriteLine("");
-                Console.WriteLine("".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("1-> For SampleClass".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("2-> For SampleAllTypesData".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("3-> For SampleAllTypesData".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("4- For ReadClassFromFile(classesconfig.json)".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("e- EXIT".PadRight(PADRIGHT_VALUE, '-'));
-                Console.WriteLine("".PadRight(PADRIGHT_VALUE, '-'));
+                Console.WriteLine(" ".PadRight(PADRIGHT_VALUE, '_'));
+                Console.WriteLine("|".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                Console.WriteLine("| 1- For SampleClass".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                Console.WriteLine("| 2- For SampleAllTypesData".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                Console.WriteLine("| 3- For ReadClassFromFile(classesconfig.json)".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                Console.WriteLine("| e- EXIT".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                Console.WriteLine("|".PadRight(PADRIGHT_VALUE, '_') + "|");
+                Console.Write("select: ");
+
+                selected = Console.ReadKey().KeyChar;
+                Console.Clear();
                 Console.WriteLine("");
-
-                consoleKey = Console.ReadKey().Key;
-
-                // control the key in here....
-                if (true)
+                Console.WriteLine(" ".PadRight(PADRIGHT_VALUE, '_'));
+                Console.WriteLine("|".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                switch (selected)
                 {
-
+                    case '1':
+                        WritePropertiesonBaseClass(Statics.SampleClass);
+                        break;
+                    case '2':
+                        WritePropertiesonBaseClass(Statics.SampleAllTypesData);
+                        break;
+                    case '3':
+                        IList objectList = PrepareJsonClasses(ClassReaderJson.ReadClassFromFile());
+                        foreach (var obj in objectList)
+                            WritePropertiesonBaseClass(obj);
+                        break;
+                    default:
+                        Console.WriteLine("| Wrong key....".PadRight(PADRIGHT_VALUE, ' ') + "|");
+                        break;
                 }
-                
-
+                Console.WriteLine("|".PadRight(PADRIGHT_VALUE, '_') + "|");
+                Console.Write("To continue press any key...");
+                Console.ReadKey();
             }
-            
-            // Test classes
-            //WritePropertiesonBaseClass(Statics.SampleClass);
-            //WritePropertiesonBaseClass(Statics.SampleAllTypesData);
+        }
 
-
-            ClassesJson classData = ClassReaderJson.ReadClassFromFile();
-
+        static IList PrepareJsonClasses(ClassesJson classData)
+        {
             IList objList = null;
             foreach (var aclass in classData.Classes)
             {
@@ -56,7 +69,9 @@ namespace ReflectionExamples
 
                 //Creating a new object dynamically
                 object newObj = o.CreateNewObject(classProperties);
-                objList = o.getObjectList();
+
+                Type listType = typeof(List<>).MakeGenericType(o.objType);
+                objList = (IList)Activator.CreateInstance(listType);
 
                 Type t = newObj.GetType();
                 object instance = Activator.CreateInstance(t);
@@ -93,7 +108,7 @@ namespace ReflectionExamples
                                 MyObjectBuilder.SetMemberValue(mInfo[0], instance, value);
                             }
                         }
-                            
+
                     }
                     else
                     {
@@ -103,18 +118,13 @@ namespace ReflectionExamples
                             MyObjectBuilder.SetMemberValue(mInfo[0], instance, null);
                     }
 
-                    
+
                 }
 
                 objList.Add(instance);
             }
 
-            foreach (var obj in objList)
-            {
-                WritePropertiesonBaseClass(obj);
-            }
-
-            Console.ReadKey();
+            return objList;
         }
 
         static void WritePropertiesonBaseClass(object obj)

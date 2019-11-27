@@ -30,13 +30,6 @@ namespace ReflectionExamples
             return myObject;
         }
 
-        public IList getObjectList()
-        {
-            Type listType = typeof(List<>).MakeGenericType(this.objType);
-
-            return (IList)Activator.CreateInstance(listType);
-        }
-
         public static MethodInfo GetCompareToMethod(object genericInstance, string sortExpression)
         {
             Type genericType = genericInstance.GetType();
@@ -131,13 +124,13 @@ namespace ReflectionExamples
 
         public static void SetCollectionMemberValue(MemberInfo member, object target, object values)
         {
+            
             object[] valueElements = ((Newtonsoft.Json.Linq.JArray)values).ToObject<object[]>();
-            object[] indexElements = Enumerable.Range(0, valueElements.Length).OfType<object>().ToArray();
-
             switch (member.MemberType)
             {
                 case MemberTypes.Field:
-                    ((FieldInfo)member).SetValue(target, valueElements);
+                    // NotImplementedException
+                    //((FieldInfo)member).SetValue(target, valueElements);
                     break;
                 case MemberTypes.Property:
                     PropertyInfo prop = (PropertyInfo)member;
@@ -150,9 +143,7 @@ namespace ReflectionExamples
                     {
                         addMethod.Invoke(prop.GetValue(target), new object[] { Convert.ChangeType(value, innerType) });
                     }
-                    
-                    //  System.Reflection.TargetParameterCountException: 'Parameter count mismatch.'
-                    //((PropertyInfo)member).SetValue(target, valueElements, indexElements);
+
                     break;
                 default:
                     throw new ArgumentException("MemberInfo must be if type FieldInfo or PropertyInfo", "member");
