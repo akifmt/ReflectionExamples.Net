@@ -1,4 +1,6 @@
 {
+  "AssemblyName": "MyClasses",
+  "DynamicModuleName": "MyModule",
   "Classes": [
     {
       "ClassName": "Class1",

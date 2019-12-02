@@ -4,31 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReflectionExamples
+namespace ReflectionExamples.MockData
 {
-
-    public static class Statics
-    {
-
-        public static AllTypesData SampleAllTypesData = new AllTypesData();
-
-        public static Category SampleClass = new Category
-        {
-            CategoryId = 1,
-            CategoryName = "Cars",
-            CategoryDetails = "Best Cars",
-            SpecialProduct = new Product { Id = 1, ProductName = "Mercedes 1", ProductDetails= "Special model." },
-            Products = new List<Product>
-            {
-                new Product{ Id = 11, ProductName = "Mercedes 11", ProductDetails = "Old model." },
-                new Product { Id = 12, ProductName = "Mercedes 12", ProductDetails = "New model." },
-            }
-        };
-
-    }
-
-
-
     public class AllTypesData
     {
         public System.Boolean PropBoolean { get { return true; } } //bool	
@@ -57,39 +34,5 @@ namespace ReflectionExamples
         // System.Collections.Generic - include Class
         public List<Product> PropListProduct { get { return new List<Product> { new Product { Id = 1, ProductName = "aaa", ProductDetails = "ddd" } }; } } //List<class>	
 
-        // bunun icin henuz dunya hazir degil
-        // System.Collections.Generic - include System.Collections.Generic - include Class
-        //public List<List<Urun>> PropListListUrun {
-        //    get {
-        //        return new List<List<Urun>> {
-        //            new List<Urun> {
-        //                new Urun { Id = 1, UrunAdi = "aa", UrunDetayi = "ddd" },
-        //                new Urun { Id = 2, UrunAdi = "bb", UrunDetayi = "ddd" },
-        //            },
-        //            new List<Urun> {
-        //                new Urun { Id = 3, UrunAdi = "cc", UrunDetayi = "ddd" },
-        //                new Urun { Id = 4, UrunAdi = "dd", UrunDetayi = "ddd" },
-        //            }
-        //        };
-        //    }
-        //} //List<List<class>>	
-
     }
-
-    public class Category
-    {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string CategoryDetails { get; set; }
-        public Product SpecialProduct { get; set; }
-        public List<Product> Products { get; set; }
-    }
-
-    public class Product
-    {
-        public int Id { get; set; }
-        public string ProductName { get; set; }
-        public string ProductDetails { get; set; }
-    }
-
 }

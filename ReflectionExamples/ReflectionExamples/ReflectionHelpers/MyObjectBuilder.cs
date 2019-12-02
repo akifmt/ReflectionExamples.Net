@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using ReflectionExamples.JsonReaderHelpers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ReflectionExamples
+namespace ReflectionExamples.ReflectionHelpers
 {
     // Reference:
     // https://stackoverflow.com/questions/15641339/create-new-propertyinfo-object-on-the-fly
@@ -16,15 +13,20 @@ namespace ReflectionExamples
     public class MyObjectBuilder
     {
         public Type objType { get; set; }
+        public string AssemblyName { get; set; }
+        public string DynamicModuleName { get; set; }
 
         public MyObjectBuilder()
         {
             this.objType = null;
         }
 
-        public object CreateNewObject(List<ClassField> Fields)
+        public object CreateNewObject(List<ClassField> Fields, string assemblyName, string dynamicModuleName)
         {
-            this.objType = CompileResultType(Fields);
+            AssemblyName = assemblyName;
+            DynamicModuleName = dynamicModuleName;
+
+            this.objType = CompileResultType(Fields, assemblyName, dynamicModuleName);
             var myObject = Activator.CreateInstance(this.objType);
 
             return myObject;
@@ -40,9 +42,9 @@ namespace ReflectionExamples
             return compareToMethodOfSortExpressionType;
         }
 
-        public static Type CompileResultType(List<ClassField> Fields)
+        public static Type CompileResultType(List<ClassField> Fields, string assemblyName, string dynamicModuleName)
         {
-            TypeBuilder tb = GetTypeBuilder();
+            TypeBuilder tb = GetTypeBuilder(assemblyName, dynamicModuleName);
             ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 
             // NOTE: assuming your list contains Field objects with fields FieldName(string) and FieldType(Type)
@@ -53,12 +55,12 @@ namespace ReflectionExamples
             return objectType;
         }
 
-        private static TypeBuilder GetTypeBuilder()
+        private static TypeBuilder GetTypeBuilder(string assemblyName, string dynamicModuleName)
         {
-            var typeSignature = "MyDynamicType";
+            var typeSignature = assemblyName;
             var an = new AssemblyName(typeSignature);
             AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
+            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(dynamicModuleName);
             TypeBuilder tb = moduleBuilder.DefineType(typeSignature
                                 , TypeAttributes.Public |
                                 TypeAttributes.Class |
@@ -106,7 +108,6 @@ namespace ReflectionExamples
             propertyBuilder.SetSetMethod(setPropMthdBldr);
         }
 
-
         public static void SetMemberValue(MemberInfo member, object target, object value)
         {
             switch (member.MemberType)
@@ -124,7 +125,7 @@ namespace ReflectionExamples
 
         public static void SetCollectionMemberValue(MemberInfo member, object target, object values)
         {
-            
+
             object[] valueElements = ((Newtonsoft.Json.Linq.JArray)values).ToObject<object[]>();
             switch (member.MemberType)
             {

@@ -45,16 +45,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes.cs" />
-    <Compile Include="ClassReaderJson.cs" />
-    <Compile Include="MyObjectBuilder.cs" />
+    <Compile Include="ConsoleWriteHelper.cs" />
+    <Compile Include="JsonReaderHelpers\ClassJsonFile.cs" />
+    <Compile Include="JsonReaderHelpers\ClassField.cs" />
+    <Compile Include="JsonReaderHelpers\ClassJson.cs" />
+    <Compile Include="JsonReaderHelpers\ClassJsonHelper.cs" />
+    <Compile Include="MockData\AllTypesData.cs" />
+    <Compile Include="MockData\Category.cs" />
+    <Compile Include="MockData\MockDataStatics.cs" />
+    <Compile Include="MockData\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReflectionHelpers\MyObjectBuilder.cs" />
+    <Compile Include="ReflectionHelpers\ReflectionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="classesconfig.json" />
+    <None Include="my_classes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
