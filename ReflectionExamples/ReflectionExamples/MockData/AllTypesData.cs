@@ -34,5 +34,21 @@ namespace ReflectionExamples.MockData
         // System.Collections.Generic - include Class
         public List<Product> PropListProduct { get { return new List<Product> { new Product { Id = 1, ProductName = "aaa", ProductDetails = "ddd" } }; } } //List<class>	
 
+
+        public void WritetoConsole()
+        {
+            Console.WriteLine("From method to console line...");
+        }
+
+        public void WritePropertytoConsole(object prop){
+            Console.WriteLine(prop.ToString());
+        }
+
+        public string ReturnPropertyasString(object prop)
+        {
+            return prop.ToString();
+        }
+
+
     }
 }

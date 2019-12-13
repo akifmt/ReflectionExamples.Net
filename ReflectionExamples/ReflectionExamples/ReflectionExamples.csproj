@@ -50,6 +50,7 @@
     <Compile Include="JsonReaderHelpers\ClassField.cs" />
     <Compile Include="JsonReaderHelpers\ClassJson.cs" />
     <Compile Include="JsonReaderHelpers\ClassJsonHelper.cs" />
+    <Compile Include="JsonReaderHelpers\ClassMethod.cs" />
     <Compile Include="MockData\AllTypesData.cs" />
     <Compile Include="MockData\Category.cs" />
     <Compile Include="MockData\MockDataStatics.cs" />

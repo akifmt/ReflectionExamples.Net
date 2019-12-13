@@ -9,6 +9,7 @@ namespace ReflectionExamples.JsonReaderHelpers
         public string AssemblyName { get; set; }
         public string DynamicModuleName { get; set; }
         public List<ClassJson> Classes { get; set; }
+
     }
 
 

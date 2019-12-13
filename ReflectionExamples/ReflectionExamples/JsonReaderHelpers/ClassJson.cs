@@ -8,5 +8,7 @@ namespace ReflectionExamples.JsonReaderHelpers
     {
         public string ClassName { get; set; }
         public List<ClassField> ClassFields { get; set; }
+
+        public List<ClassMethod> ClassMethods { get; set; }
     }
 }
