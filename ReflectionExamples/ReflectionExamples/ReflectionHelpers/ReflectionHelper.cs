@@ -18,14 +18,11 @@ namespace ReflectionExamples.ReflectionHelpers
                 string className = aclass.ClassName;
                 List<ClassField> classProperties = aclass.ClassFields;
 
-                // Methods
-                var classMethods = aclass.ClassMethods;
-
                 //MyObjectBuilder Class
                 MyObjectBuilder o = new MyObjectBuilder();
 
                 //Creating a new object dynamically
-                object newObj = o.CreateNewObject(classProperties, classMethods, classData.AssemblyName, classData.DynamicModuleName);
+                object newObj = o.CreateNewObject(classProperties, classData.AssemblyName, classData.DynamicModuleName);
 
                 Type listType = typeof(List<>).MakeGenericType(o.objType);
                 objList = (IList)Activator.CreateInstance(listType);

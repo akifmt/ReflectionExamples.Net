@@ -25,14 +25,7 @@
           "TypeName": "System.Collections.Generic.List<System.String>",
           "Value": [ "aaa", "bbb", "ccc" ]
         }
-      ],
-      "ClassMethods": [
-        {
-          "Name": "WritetoConsole",
-          "Definition": "Console.WriteLine(\"From method to console line...\");"
-        }
       ]
-
     }
   ]
 }

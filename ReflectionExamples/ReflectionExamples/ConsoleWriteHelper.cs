@@ -26,26 +26,8 @@ namespace ReflectionExamples
 
                 if (propTypeBase.Namespace == "System")
                 {
-
-                    // TEST İÇİN EKLENDİ!!!
-                    int sayi = 1234;
-                    object[] args = new object[] { sayi };
-
-                    MethodInfo methodInfo1 = typeBase.GetMethod("WritePropertytoConsole");
-                    methodInfo1.Invoke(obj, args);
-
-
-                    MethodInfo methodInfo2 = typeBase.GetMethod("ReturnPropertyasString");
-                    string returnedValue = (string) methodInfo2.Invoke(obj, args);
-
-
-
-
-
-
                     // Built-in types
                     ProcessingBuiltinTypes(propertyInfoBase, obj);
-
                 }
                 else if (definedTypes.Contains(propTypeBase))
                 {

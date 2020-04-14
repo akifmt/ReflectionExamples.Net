@@ -23,12 +23,12 @@ namespace ReflectionExamples.ReflectionHelpers
             this.objType = null;
         }
 
-        public object CreateNewObject(List<ClassField> fields, List<ClassMethod> methods, string assemblyName, string dynamicModuleName)
+        public object CreateNewObject(List<ClassField> fields, string assemblyName, string dynamicModuleName)
         {
             AssemblyName = assemblyName;
             DynamicModuleName = dynamicModuleName;
 
-            this.objType = CompileResultType(fields, methods, assemblyName, dynamicModuleName);
+            this.objType = CompileResultType(fields, assemblyName, dynamicModuleName);
             var myObject = Activator.CreateInstance(this.objType);
 
             return myObject;
@@ -44,7 +44,7 @@ namespace ReflectionExamples.ReflectionHelpers
             return compareToMethodOfSortExpressionType;
         }
 
-        public static Type CompileResultType(List<ClassField> fields, List<ClassMethod> methods, string assemblyName, string dynamicModuleName)
+        public static Type CompileResultType(List<ClassField> fields, string assemblyName, string dynamicModuleName)
         {
             TypeBuilder tb = GetTypeBuilder(assemblyName, dynamicModuleName);
             ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
@@ -52,9 +52,6 @@ namespace ReflectionExamples.ReflectionHelpers
             // NOTE: assuming your list contains Field objects with fields FieldName(string) and FieldType(Type)
             foreach (var field in fields)
                 CreateProperty(tb, field.Name, field.Type);
-
-            foreach (var method in methods)
-                CreateMethod(tb, method.Name, method.Definition);
 
             Type objectType = tb.CreateType();
             return objectType;
@@ -112,24 +109,6 @@ namespace ReflectionExamples.ReflectionHelpers
             propertyBuilder.SetGetMethod(getPropMthdBldr);
             propertyBuilder.SetSetMethod(setPropMthdBldr);
         }
-
-        private static void CreateMethod(TypeBuilder tb, string methodName, string methodDefinition)
-        {
-
-
-            // BU METHOD HAZIRLANACAK!!!
-
-
-            MethodBuilder methodBuilder = tb.DefineMethod(methodName, MethodAttributes.Public, null, null);
-
-
-            // https://www.codeproject.com/Tips/715891/Compiling-Csharp-Code-at-Runtime
-            CSharpCodeProvider provider = new CSharpCodeProvider();
-            CompilerResults results = provider.CompileAssemblyFromSource(new CompilerParameters(), methodDefinition);
-
-
-        }
-
 
         public static void SetMemberValue(MemberInfo member, object target, object value)
         {
