@@ -5,7 +5,7 @@ Reflection basic examples.
 
 - **Technologies**
     - **.Net Framework 4.5**
-    - **Visual Studio 2017** 
+    - **Visual Studio 2019** 
 
 - **Capabilities**
 	- Field
